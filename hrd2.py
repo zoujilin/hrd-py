@@ -281,7 +281,7 @@ class Person():
             elif MV_STEP[a][1]=='R' : 
             	  self.move_right(MV_STEP[a][0])           
             self.step_num = self.step_num + 1
-   
+        else : self.auto = 0        
    
     def step_back_move(self):  
         if(self.step_num>0) :  
@@ -305,6 +305,7 @@ class HRD():
         self.person = Person(self.screen)
         self.resource = GameResource()
         self.resource.play_bg_music()
+        self.auto = 0   
            
     def run(self):
         global enable_print
@@ -327,12 +328,15 @@ class HRD():
                     elif event.key ==K_b:
                         self.person.step_back_move()                      
                     elif event.key ==K_f:
+                        self.auto = 0
                         self.person.step_forward_move()                      
                     elif event.key ==K_a:
                         self.person.__init__(self.screen)                        
-                        self.person.auto_move()                      
+                        self.auto = 1
+                        #self.person.auto_move()                      
                     elif event.key ==K_UP:
                         enable_print = 1
+                        self.auto = 0
                         self.person.__init__(self.screen)                        
                 elif event.type == MOUSEBUTTONDOWN:
                     if  self.person.click_button(event.pos): #pos means coordinate when mouse.down
@@ -349,7 +353,10 @@ class HRD():
                     self.person.up_mouse(event.pos)
                     #print('mouse up')
                     #self.brush.end_draw()
- 
+                
+            if(self.auto==1) : 
+                pygame.time.wait(400)        
+                self.person.step_forward_move() 
             self.person.draw()
             pygame.display.update()
  
